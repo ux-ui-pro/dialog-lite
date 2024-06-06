@@ -7,11 +7,13 @@ class DialogLite {
 
   private currentClass: string = '';
 
-  private previouslyFocusedElement: Element | null = null;
+  private previouslyFocusedElement: HTMLElement | null = null;
 
-  private readonly closingButton: boolean = false;
+  private readonly isCloseButtonEnabled: boolean = false;
 
-  private readonly closingBackdrop: boolean = false;
+  private readonly isCloseOnBackdropClickEnabled: boolean = false;
+
+  private lastActionTime: number = 0;
 
   constructor({
     closingButton = false,
@@ -20,23 +22,28 @@ class DialogLite {
     closingButton?: boolean;
     closingBackdrop?: boolean;
   } = {}) {
-    this.closingButton = closingButton;
-    this.closingBackdrop = closingBackdrop;
+    this.isCloseButtonEnabled = closingButton;
+    this.isCloseOnBackdropClickEnabled = closingBackdrop;
     this.getElements();
   }
 
   private getElements(): void {
     this.dialogEl = document.querySelector('.dialog-lite');
-    this.dialogCloseEl = document.querySelector('.dialog-lite-close-button');
-    this.dialogBackdropEl = document.querySelector('.dialog-lite__backdrop');
+
+    if (!this.dialogEl) {
+      throw new Error('Dialog element not found');
+    }
+
+    this.dialogCloseEl = this.dialogEl.querySelector('.dialog-lite-close-button');
+    this.dialogBackdropEl = this.dialogEl.querySelector('.dialog-lite__backdrop');
   }
 
   public init(): void {
-    if (this.closingButton) {
+    if (this.isCloseButtonEnabled) {
       this.dialogCloseEl?.addEventListener('click', () => this.close());
     }
 
-    if (this.closingBackdrop) {
+    if (this.isCloseOnBackdropClickEnabled) {
       this.dialogBackdropEl?.addEventListener('click', () => this.close());
     }
 
@@ -52,28 +59,56 @@ class DialogLite {
   }: {
     stylingClass?: string;
   } = {}): void {
+    if (this.isDebounced()) return;
     if (!this.dialogEl) return;
 
-    this.previouslyFocusedElement = document.activeElement;
+    this.previouslyFocusedElement = document.activeElement as HTMLElement;
     this.dialogEl.removeAttribute('aria-hidden');
     (this.dialogEl.querySelector('[tabindex="0"]') as HTMLElement).focus();
-    this.updateClassList('dialog-lite--in', 'dialog-lite--out', stylingClass);
+
+    this.updateClassList({
+      addClass: 'dialog-lite--in',
+      removeClass: 'dialog-lite--out',
+      newClass: stylingClass,
+    });
   }
 
   public close(): void {
+    if (this.isDebounced()) return;
     if (!this.dialogEl) return;
 
     this.dialogEl.setAttribute('aria-hidden', 'true');
     (this.previouslyFocusedElement as HTMLElement)?.focus();
-    this.updateClassList('dialog-lite--out', 'dialog-lite--in', '', true);
+
+    this.updateClassList({
+      addClass: 'dialog-lite--out',
+      removeClass: 'dialog-lite--in',
+      newClass: '',
+      delayRemove: true,
+    });
   }
 
-  private updateClassList(
-    addClass: string,
-    removeClass: string,
-    newClass: string,
-    delayRemove: boolean = false,
-  ): void {
+  private isDebounced(): boolean {
+    const now = Date.now();
+
+    if (now - this.lastActionTime < 500) return true;
+
+    this.lastActionTime = now;
+
+    return false;
+  }
+
+  private updateClassList({
+    addClass,
+    removeClass,
+    newClass,
+    delayRemove = false,
+  }: {
+    addClass: string;
+    removeClass: string;
+    newClass: string;
+    delayRemove?: boolean;
+  }): void {
     if (this.currentClass) {
       if (delayRemove) {
         const classToRemove = this.currentClass;
@@ -81,7 +116,7 @@ class DialogLite {
         setTimeout(() => {
           this.dialogEl?.classList.remove(classToRemove);
           this.currentClass = '';
-        }, 1000);
+        }, 500);
       } else {
         this.dialogEl?.classList.remove(this.currentClass);
       }
