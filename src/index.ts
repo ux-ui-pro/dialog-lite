@@ -65,21 +65,26 @@ class DialogLite {
 
     this.dialogEl.setAttribute('aria-hidden', 'true');
     (this.previouslyFocusedElement as HTMLElement)?.focus();
-    this.updateClassList('dialog-lite--out', 'dialog-lite--in', '');
-
-    if (this.currentClass) {
-      setTimeout(() => {
-        this.dialogEl.classList.remove(this.currentClass);
-        this.currentClass = '';
-      }, 500);
-    }
+    this.updateClassList('dialog-lite--out', 'dialog-lite--in', '', true);
   }
 
-  private updateClassList(addClass: string, removeClass: string, newClass: string): void {
+  private updateClassList(
+    addClass: string,
+    removeClass: string,
+    newClass: string,
+    delayRemove: boolean = false,
+  ): void {
     if (this.currentClass) {
-      setTimeout(() => {
+      if (delayRemove) {
+        const classToRemove = this.currentClass;
+
+        setTimeout(() => {
+          this.dialogEl?.classList.remove(classToRemove);
+          this.currentClass = '';
+        }, 1000);
+      } else {
         this.dialogEl?.classList.remove(this.currentClass);
-      }, 500);
+      }
     }
 
     this.dialogEl?.classList.remove(removeClass);
