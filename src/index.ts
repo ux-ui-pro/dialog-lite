@@ -68,8 +68,10 @@ class DialogLite {
     this.updateClassList('dialog-lite--out', 'dialog-lite--in', '');
 
     if (this.currentClass) {
-      this.dialogEl.classList.remove(this.currentClass);
-      this.currentClass = '';
+      setTimeout(() => {
+        this.dialogEl.classList.remove(this.currentClass);
+        this.currentClass = '';
+      }, 500);
     }
   }
 
