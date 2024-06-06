@@ -75,7 +75,9 @@ class DialogLite {
 
   private updateClassList(addClass: string, removeClass: string, newClass: string): void {
     if (this.currentClass) {
-      this.dialogEl?.classList.remove(this.currentClass);
+      setTimeout(() => {
+        this.dialogEl?.classList.remove(this.currentClass);
+      }, 500);
     }
 
     this.dialogEl?.classList.remove(removeClass);

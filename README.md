@@ -10,7 +10,7 @@
 </div>
 
 <p align="center">DialogLite is designed to control a dialog box (modal window) on a web page, providing the functionality to open, close and apply custom styles through a simple interface.</p>
-<p align="center"><sup>0.5kB gzipped</sup></p>
+<p align="center"><sup>600B gzipped</sup></p>
 <p align="center"><a href="https://codepen.io/ux-ui/pen/LYoLOjr">Demo</a></p>
 <br>
 
