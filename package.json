@@ -1,0 +1,77 @@
+{
+  "name": "dialog-lite",
+  "version": "0.0.1-alpha.1",
+  "description": "DialogLite is designed to control a dialog box (modal window) on a web page, providing the functionality to open, close and apply custom styles through a simple interface.",
+  "author": "ux-ui.pro",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ux-ui-pro/dialog-lite.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ux-ui-pro/dialog-lite/issues"
+  },
+  "homepage": "https://github.com/ux-ui-pro/dialog-lite",
+  "sideEffects": false,
+  "browserslist": "> 0.5%, last 2 versions, not dead",
+  "scripts": {
+    "clean": "rm -rf dist .parcel-cache",
+    "build": "yarn clean && parcel build",
+    "lint:js": "eslint **/*.{ts,js}",
+    "lint:scss": "stylelint **/*.scss",
+    "lintfix": "yarn lint:js --fix && yarn lint:scss --fix"
+  },
+  "css": "dist/index.css",
+  "main": "dist/index.js",
+  "module": "dist/index.module.js",
+  "types": "dist/index.d.ts",
+  "targets": {
+    "css": {
+      "source": "src/index.scss"
+    },
+    "main": {
+      "source": "src/index.ts"
+    },
+    "module": {
+      "source": "src/index.ts"
+    },
+    "types": {
+      "source": "src/index.ts"
+    }
+  },
+  "devDependencies": {
+    "@parcel/packager-ts": "2.12.0",
+    "@parcel/transformer-sass": "2.12.0",
+    "@parcel/transformer-typescript-types": "2.12.0",
+    "@typescript-eslint/eslint-plugin": "^7.12.0 ",
+    "@typescript-eslint/parser": "^7.12.0 ",
+    "eslint": "^7.32.0 || ^8.57.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.29.1",
+    "stylelint": "^16.6.1",
+    "stylelint-config-standard-scss": "^13.1.0",
+    "stylelint-selector-bem-pattern": "^4.0.0",
+    "parcel": "^2.12.0",
+    "typescript": "^5.4.5"
+  },
+  "keywords": [
+    "JavaScript",
+    "TypeScript",
+    "modal",
+    "dialog",
+    "management",
+    "component",
+    "UI",
+    "interface",
+    "event",
+    "handling",
+    "keyboard",
+    "accessibility",
+    "DOM",
+    "manipulation",
+    "class",
+    "web",
+    "development",
+    "frontend"
+  ]
+}
