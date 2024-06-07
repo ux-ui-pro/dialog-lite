@@ -64,7 +64,12 @@ class DialogLite {
 
     this.previouslyFocusedElement = document.activeElement as HTMLElement;
     this.dialogEl.removeAttribute('aria-hidden');
-    (this.dialogEl.querySelector('[tabindex="0"]') as HTMLElement).focus();
+
+    const focusableElement = this.dialogEl.querySelector('[tabindex="0"]') as HTMLElement;
+
+    if (focusableElement) {
+      focusableElement.focus();
+    }
 
     this.updateClassList({
       addClass: 'dialog-lite--in',
