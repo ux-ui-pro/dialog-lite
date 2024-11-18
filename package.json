@@ -1,6 +1,6 @@
 {
   "name": "dialog-lite",
-  "version": "0.0.3",
+  "version": "1.0.0",
   "description": "DialogLite is designed to control a dialog box (modal window) on a web page, providing the functionality to open, close and apply custom styles through a simple interface.",
   "author": "ux-ui.pro",
   "license": "MIT",
@@ -15,11 +15,14 @@
   "sideEffects": false,
   "browserslist": "> 0.5%, last 2 versions, not dead",
   "scripts": {
-    "clean": "rm -rf dist .parcel-cache",
+    "clean": "rm -rf dist .parcel",
     "build": "yarn clean && parcel build",
+    "lint:css": "stylelint **/*.scss",
+    "lint:fix:css": "stylelint **/*.scss --fix",
     "lint:js": "eslint **/*.{ts,js}",
-    "lint:scss": "stylelint **/*.scss",
-    "lintfix": "yarn lint:js --fix && yarn lint:scss --fix"
+    "lint:fix:js": "eslint **/*.{ts,js} --fix",
+    "format:js": "prettier --write **/*.{ts,js}",
+    "lint:fix": "yarn lint:fix:js && yarn format:js && yarn lint:fix:css"
   },
   "css": "dist/index.css",
   "main": "dist/index.js",
@@ -40,19 +43,22 @@
     }
   },
   "devDependencies": {
+    "@eslint/js": "9.12.0",
     "@parcel/packager-ts": "2.12.0",
     "@parcel/transformer-sass": "2.12.0",
     "@parcel/transformer-typescript-types": "2.12.0",
-    "@typescript-eslint/eslint-plugin": "^7.12.0 ",
-    "@typescript-eslint/parser": "^7.12.0 ",
-    "eslint": "^7.32.0 || ^8.57.0",
-    "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-plugin-import": "^2.29.1",
-    "stylelint": "^16.6.1",
-    "stylelint-config-standard-scss": "^13.1.0",
-    "stylelint-selector-bem-pattern": "^4.0.0",
-    "parcel": "^2.12.0",
-    "typescript": "^5.4.5"
+    "@typescript-eslint/eslint-plugin": "8.9.0",
+    "@typescript-eslint/parser": "8.9.0",
+    "eslint": "9.12.0",
+    "eslint-config-prettier": "9.1.0",
+    "eslint-plugin-import": "2.31.0",
+    "globals": "15.11.0",
+    "parcel": "2.12.0",
+    "prettier": "3.3.3",
+    "stylelint": "16.10.0",
+    "stylelint-config-standard-scss": "13.1.0",
+    "stylelint-selector-bem-pattern": "4.0.1",
+    "typescript": "5.4.5"
   },
   "keywords": [
     "JavaScript",
