@@ -1,6 +1,6 @@
 {
   "name": "dialog-lite",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "DialogLite is designed to control a dialog box (modal window) on a web page, providing the functionality to open, close and apply custom styles through a simple interface.",
   "author": "ux-ui.pro",
   "license": "MIT",
@@ -25,40 +25,28 @@
     "lint:fix": "yarn lint:fix:js && yarn format:js && yarn lint:fix:css"
   },
   "css": "dist/index.css",
+  "source": "src/index.ts",
   "main": "dist/index.js",
   "module": "dist/index.module.js",
-  "types": "dist/index.d.ts",
-  "targets": {
-    "css": {
-      "source": "src/index.scss"
-    },
-    "main": {
-      "source": "src/index.ts"
-    },
-    "module": {
-      "source": "src/index.ts"
-    },
-    "types": {
-      "source": "src/index.ts"
-    }
-  },
+  "types": "dist/dialog-lite.d.ts",
   "devDependencies": {
-    "@eslint/js": "9.12.0",
-    "@parcel/packager-ts": "2.12.0",
-    "@parcel/transformer-sass": "2.12.0",
-    "@parcel/transformer-typescript-types": "2.12.0",
-    "@typescript-eslint/eslint-plugin": "8.9.0",
-    "@typescript-eslint/parser": "8.9.0",
-    "eslint": "9.12.0",
+    "@eslint/js": "9.17.0",
+    "@parcel/packager-ts": "2.13.3",
+    "@parcel/transformer-typescript-types": "2.13.3",
+    "@parcel/transformer-sass": "2.13.3",
+    "@typescript-eslint/eslint-plugin": "8.18.2",
+    "@typescript-eslint/parser": "8.18.2",
+    "eslint": "9.17.0",
     "eslint-config-prettier": "9.1.0",
+    "eslint-import-resolver-typescript": "3.7.0",
     "eslint-plugin-import": "2.31.0",
-    "globals": "15.11.0",
-    "parcel": "2.12.0",
-    "prettier": "3.3.3",
+    "globals": "15.14.0",
+    "parcel": "2.13.3",
+    "prettier": "3.4.2",
+    "typescript": "5.7.2",
     "stylelint": "16.10.0",
     "stylelint-config-standard-scss": "13.1.0",
-    "stylelint-selector-bem-pattern": "4.0.1",
-    "typescript": "5.4.5"
+    "stylelint-selector-bem-pattern": "4.0.1"
   },
   "keywords": [
     "JavaScript",
