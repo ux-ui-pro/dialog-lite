@@ -19,11 +19,13 @@
     margin: auto;
     z-index: var(--z-index-dialog-lite-backdrop, 993);
 
+    /* stylelint-disable-next-line selector-class-pattern */
     .dialog-lite--in & {
       background-color: var(--c-dialog-lite-backdrop-in, hsla(240deg 22% 6% / 82%));
       transition: background-color 400ms cubic-bezier(.61, 1, .88, 1);
     }
 
+    /* stylelint-disable-next-line selector-class-pattern */
     .dialog-lite--out & {
       pointer-events: none;
       background-color: var(--c-dialog-lite-backdrop-out, hsla(200deg 2% 6% / 0%));
@@ -51,6 +53,7 @@
       position: relative;
       margin: 20px;
 
+      /* stylelint-disable-next-line selector-class-pattern */
       .dialog-lite--in & {
         pointer-events: auto;
         opacity: 1;
@@ -60,6 +63,7 @@
           transform 400ms cubic-bezier(.61, 1, .88, 1);
       }
 
+      /* stylelint-disable-next-line selector-class-pattern */
       .dialog-lite--out & {
         pointer-events: none;
         opacity: 0;
