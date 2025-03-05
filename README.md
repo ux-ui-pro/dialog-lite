@@ -28,11 +28,7 @@ import DialogLite from 'dialog-lite';
 ```
 <sub>CSS</sub>
 ```SCSS
-@import "dialog-lite/dist/";
-```
-<sub>if your bundler supports SCSS</sub>
-```SCSS
-@import "dialog-lite/src/";
+import 'dialog-lite/dist/index.css';
 ```
 <br>
 
