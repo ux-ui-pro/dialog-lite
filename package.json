@@ -1,6 +1,6 @@
 {
   "name": "dialog-lite",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "DialogLite is designed to control a dialog box (modal window) on a web page, providing the functionality to open, close and apply custom styles through a simple interface.",
   "author": "ux-ui.pro",
   "license": "MIT",

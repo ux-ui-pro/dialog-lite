@@ -27,8 +27,12 @@ yarn add dialog-lite
 import DialogLite from 'dialog-lite';
 ```
 <sub>CSS</sub>
-```SCSS
+```javascript
 import 'dialog-lite/dist/index.css';
+```
+<sub>or</sub>
+```SCSS
+@import "dialog-lite/dist/index.css";
 ```
 <br>
 

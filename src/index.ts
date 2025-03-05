@@ -15,10 +15,6 @@ class DialogLite {
   private dialogBackdropEl: HTMLDivElement | null = null;
   private mainContentEl: HTMLElement | null = null;
 
-  private focusableEls: HTMLElement[] = [];
-  private firstFocusableEl: HTMLElement | null = null;
-  private lastFocusableEl: HTMLElement | null = null;
-
   private currentClass = '';
   private previouslyFocusedElement: HTMLElement | null = null;
   private lastActionTime = 0;
@@ -62,16 +58,18 @@ class DialogLite {
       if (event.key === 'Escape' && this.isOpen) {
         this.close();
       }
-
-      if (event.key === 'Tab' && this.isOpen) {
-        this.handleTabKey(event);
-      }
     });
   }
 
   public open({ stylingClass = '' }: OpenOptions = {}): void {
     if (this.isDebounced()) return;
     if (!this.dialogEl) return;
+
+    if (this.dialogEl.style.display === 'none') {
+      this.dialogEl.style.display = '';
+
+      void this.dialogEl.offsetWidth;
+    }
 
     this.isOpen = true;
 
@@ -83,12 +81,6 @@ class DialogLite {
 
     this.previouslyFocusedElement = document.activeElement as HTMLElement;
 
-    this.getFocusableElements();
-
-    if (this.firstFocusableEl) {
-      this.firstFocusableEl.focus();
-    }
-
     this.updateClassList({
       addClass: 'dialog-lite--in',
       removeClass: 'dialog-lite--out',
@@ -98,7 +90,6 @@ class DialogLite {
 
   public close(): void {
     if (this.isDebounced()) return;
-
     if (!this.dialogEl) return;
 
     this.isOpen = false;
@@ -119,48 +110,12 @@ class DialogLite {
       newClass: '',
       delayRemove: true,
     });
-  }
 
-  private getFocusableElements(): void {
-    if (!this.dialogEl) return;
-
-    const focusableSelectors = [
-      'a[href]',
-      'area[href]',
-      'input:not([disabled])',
-      'select:not([disabled])',
-      'textarea:not([disabled])',
-      'button:not([disabled])',
-      'iframe',
-      '[tabindex]:not([tabindex="-1"])',
-      '[contenteditable]',
-    ];
-
-    const allElements = Array.from(this.dialogEl.querySelectorAll(focusableSelectors.join(',')));
-
-    this.focusableEls = allElements.filter((el): el is HTMLElement => el instanceof HTMLElement);
-
-    if (this.focusableEls.length > 0) {
-      this.firstFocusableEl = this.focusableEls[0];
-      this.lastFocusableEl = this.focusableEls[this.focusableEls.length - 1];
-    } else {
-      this.firstFocusableEl = null;
-      this.lastFocusableEl = null;
-    }
-  }
-
-  private handleTabKey(event: KeyboardEvent): void {
-    if (!this.firstFocusableEl || !this.lastFocusableEl) return;
-
-    if (event.shiftKey && document.activeElement === this.firstFocusableEl) {
-      event.preventDefault();
-
-      this.lastFocusableEl.focus();
-    } else if (!event.shiftKey && document.activeElement === this.lastFocusableEl) {
-      event.preventDefault();
-
-      this.firstFocusableEl.focus();
-    }
+    setTimeout(() => {
+      if (this.dialogEl) {
+        this.dialogEl.style.display = 'none';
+      }
+    }, 500);
   }
 
   private updateClassList({
