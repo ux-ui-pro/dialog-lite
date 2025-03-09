@@ -21,27 +21,28 @@ export default defineConfig({
       fileName: (format) => `index.${format}.js`,
     },
     cssCodeSplit: true,
+    emptyOutDir: true,
     rollupOptions: {
+      plugins: [
+        terser({
+          compress: {
+            drop_console: true,
+            drop_debugger: true,
+            dead_code: true,
+            reduce_vars: true,
+            reduce_funcs: true,
+          },
+          mangle: {
+            toplevel: true,
+            keep_fnames: false,
+          },
+          format: {
+            comments: false,
+          },
+        }),
+      ],
       output: {
         assetFileNames: 'index.[ext]',
-        plugins: [
-          terser({
-            compress: {
-              drop_console: true,
-              drop_debugger: true,
-              dead_code: true,
-              reduce_vars: true,
-              reduce_funcs: true,
-            },
-            mangle: {
-              toplevel: true,
-              keep_fnames: false,
-            },
-            format: {
-              comments: false,
-            },
-          }),
-        ],
       },
     },
   },
