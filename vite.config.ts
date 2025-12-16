@@ -1,17 +1,49 @@
 import { defineConfig } from 'vite';
-import terser from '@rollup/plugin-terser';
 import dts from 'vite-plugin-dts';
-import sassDts from 'vite-plugin-sass-dts';
+import { readFile } from 'node:fs/promises';
+import { resolve } from 'node:path';
+import { transform } from 'lightningcss';
 
 export default defineConfig({
   plugins: [
+    {
+      name: 'dialog-lite:css',
+      async load(id) {
+        if (!id.includes('dialog-lite.css') || !id.includes('?raw')) return null;
+
+        const file = id.split('?', 1)[0];
+        const input = await readFile(file);
+        const result = transform({
+          filename: file,
+          code: input,
+          minify: true,
+        });
+
+        const minifiedCssText = Buffer.from(result.code).toString('utf8');
+        return `export default ${JSON.stringify(minifiedCssText)};`;
+      },
+      async generateBundle() {
+        const file = resolve(process.cwd(), 'src', 'dialog-lite.css');
+        const input = await readFile(file);
+        const result = transform({
+          filename: file,
+          code: input,
+          minify: true,
+        });
+
+        this.emitFile({
+          type: 'asset',
+          fileName: 'dialog-lite.css',
+          source: Buffer.from(result.code).toString('utf8'),
+        });
+      },
+    },
     dts({
       outDir: 'dist',
       insertTypesEntry: true,
       entryRoot: 'src',
       cleanVueFileName: true,
     }),
-    sassDts(),
   ],
   build: {
     lib: {
@@ -20,34 +52,11 @@ export default defineConfig({
       formats: ['es', 'cjs', 'umd'],
       fileName: (format) => `index.${format}.js`,
     },
-    cssCodeSplit: true,
     emptyOutDir: true,
     rollupOptions: {
-      plugins: [
-        terser({
-          compress: {
-            drop_console: true,
-            drop_debugger: true,
-            dead_code: true,
-            reduce_vars: true,
-            reduce_funcs: true,
-          },
-          mangle: {
-            toplevel: true,
-            keep_fnames: false,
-          },
-          format: {
-            comments: false,
-          },
-        }),
-      ],
       output: {
         assetFileNames: 'index.[ext]',
       },
     },
-  },
-  server: {
-    open: true,
-    port: 3000,
   },
 });
