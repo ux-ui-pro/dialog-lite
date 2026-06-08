@@ -50,13 +50,27 @@ export type DialogLiteOptions = {
   role?: string;
   ariaModal?: boolean;
   emitEvents?: boolean;
+  closeOnEscape?: boolean;
+  onOpen?: (detail: DialogLiteOpenDetail) => void;
+  onClose?: (detail: DialogLiteCloseDetail) => void;
 };
 
-interface OpenOptions {
+export interface DialogLiteOpenDetail {
+  stylingClass: string;
+}
+
+export type DialogLiteCloseDetail = Record<string, never>;
+
+export type DialogLiteEventName = 'dialog-lite:open' | 'dialog-lite:close';
+
+export interface OpenOptions {
   stylingClass?: string;
 }
 
-export type DialogLiteInstance = Pick<DialogLite, 'init' | 'open' | 'close' | 'destroy'>;
+export type DialogLiteInstance = Pick<
+  DialogLite,
+  'init' | 'open' | 'close' | 'destroy' | 'isOpened'
+>;
 
 class DialogLite {
   private readonly options: Required<
@@ -74,8 +88,10 @@ class DialogLite {
       | 'role'
       | 'ariaModal'
       | 'emitEvents'
+      | 'closeOnEscape'
     >
   > &
+    Pick<DialogLiteOptions, 'onOpen' | 'onClose'> &
     Pick<DialogLiteOptions, 'dialog' | 'mainContent'>;
 
   private dialogEl: HTMLElement | null = null;
@@ -111,6 +127,9 @@ class DialogLite {
       role: options.role ?? 'dialog',
       ariaModal: options.ariaModal ?? true,
       emitEvents: options.emitEvents ?? true,
+      closeOnEscape: options.closeOnEscape ?? true,
+      onOpen: options.onOpen,
+      onClose: options.onClose,
     };
   }
 
@@ -147,7 +166,16 @@ class DialogLite {
     }
   }
 
-  private emit(name: 'dialog-lite:open' | 'dialog-lite:close', detail: unknown): void {
+  private emit(
+    name: DialogLiteEventName,
+    detail: DialogLiteOpenDetail | DialogLiteCloseDetail,
+  ): void {
+    if (name === 'dialog-lite:open') {
+      this.options.onOpen?.(detail as DialogLiteOpenDetail);
+    } else {
+      this.options.onClose?.(detail as DialogLiteCloseDetail);
+    }
+
     if (!this.options.emitEvents || !this.dialogEl) return;
 
     this.dialogEl.dispatchEvent(new CustomEvent(name, { detail }));
@@ -265,7 +293,7 @@ class DialogLite {
     document.addEventListener(
       'keydown',
       (event: KeyboardEvent) => {
-        if (event.key === 'Escape' && this.isOpen) {
+        if (this.options.closeOnEscape && event.key === 'Escape' && this.isOpen) {
           this.close();
         }
       },
@@ -273,6 +301,10 @@ class DialogLite {
     );
 
     this.dialogEl?.addEventListener('keydown', (e) => this.handleFocusTrapKeydown(e), { signal });
+  }
+
+  public isOpened(): boolean {
+    return this.isOpen;
   }
 
   public destroy(): void {
@@ -286,7 +318,7 @@ class DialogLite {
     if (this.isDebounced()) return;
 
     this.ensureInitialized();
- 
+
     if (!this.dialogEl) return;
 
     this.clearTimers();
