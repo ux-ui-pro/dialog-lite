@@ -1,0 +1,36 @@
+# Publish to npm via Trusted Publishing (OIDC) — TEMPLATE / STUB FOR REVIEW (assembly.md §8).
+#
+# This file ships as part of the package scaffold: cloned packages inherit it.
+# The template itself is "private": true, so this workflow never publishes the template.
+#
+# Human/CI prerequisites for a real package (NOT performed by the agent, HANDOFF §4):
+#   1. Create the npm scope/org and grant publish rights.
+#   2. Configure a Trusted Publisher for the package on npmjs.com
+#      (package Settings → Trusted Publisher: this repository + this workflow file).
+# No long-lived NPM_TOKEN is used: with a Trusted Publisher configured, npm mints
+# short-lived OIDC credentials and attaches provenance automatically.
+name: publish
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+  id-token: write # required for OIDC Trusted Publishing + provenance
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+          cache: npm
+      # Trusted Publishing (OIDC) requires npm >= 11.5.1.
+      - run: npm install -g npm@latest
+      - run: npm ci
+      - run: npm run verify
+      - run: npm publish --provenance --access public
