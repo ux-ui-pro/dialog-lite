@@ -1,4 +1,5 @@
-import DEFAULT_CSS_TEXT from './dialog-lite.css?raw';
+import './dialog-lite.css';
+import DEFAULT_CSS_TEXT from './dialog-lite.css?inline';
 
 export const dialogLiteCssText: string = DEFAULT_CSS_TEXT;
 
